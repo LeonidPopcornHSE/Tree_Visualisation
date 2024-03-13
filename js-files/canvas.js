@@ -9,14 +9,27 @@ function setup() {
     background(220);
     var tree = new Tree(TREEX, TREEY);
     document.querySelector('.add-button').addEventListener('click', function(event){
-        let nodeValue = eval(document.querySelector('.input-value').value);
-        if (tree.searchInTree(nodeValue)) {
-            tree.addValue(nodeValue);
+        let array = (document.querySelector('.input-value').value).split(',');
+        let nodeValue;
+        for (let i = 0; i < array.length; i++) {
+            nodeValue = eval(array[i]);
+            if (tree.searchInTree(nodeValue)) {
+                tree.addValue(nodeValue);
+                clear();
+                background(220);
+                tree.printTree(nodeValue);
+            }
         }
         document.querySelector('.input-value').value = '';
+    });
+    document.querySelector('.clear-tree-button').addEventListener('click', function(event){
+        tree = null;
         clear();
         background(220);
-        tree.printTree();
+        tree = new Tree(TREEX, TREEY);
     });
 }
+
+
+
  

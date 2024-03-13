@@ -16,7 +16,17 @@ class Node {
         this.leftSpacing = 0;
         this.cumulativeRightSpacing = 0;
         this.cumulativeLeftSpacing = 0;
-        this.colorBlue = color(8, 143, 143)
+        this.colorBlue = color(8, 143, 143);
+        this.colorGreen = color(34, 139, 34);
+    }
+
+    wait(ms) {
+        console.log(1);
+        return new Promise(resolve => setTimeout(resolve, ms)); 
+    }
+
+    awaiting() {
+        this.wait(5000);
     }
 
     addValue(value) {
@@ -24,8 +34,6 @@ class Node {
             this.value = value;
             this.left = new Node(this);
             this.right = new Node(this);
-            //this.drawNode(1);
-            //await sleep(5000);
             return this;
         }
         else if (this.value > value) {
@@ -93,19 +101,40 @@ class Node {
         text(this.value,this.x,this.y+1);
     }
 
-    printNode() {
-        this.drawNode();
+    printNode(mode, value = null) {
+        if ((this.left.value === null) && (this.right.value === null) && (value !== null)) {
+            this.drawNode(2);
+        }
+        else if (value === null) {
+            this.drawNode(0);
+        }
+        else {
+            this.drawNode(mode);
+        }
         if (this.left.value !== null) {
-            this.left.printNode();
+            if (this.value > value) {
+                this.left.printNode(1, value);
+            }
+            else if (this.value < value) {
+                this.left.printNode(0);
+            }
         }
         if (this.right.value !== null) {
-            this.right.printNode();
+            if (this.value > value) {
+                this.right.printNode(0);
+            }
+            else if (this.value < value) {
+                this.right.printNode(1, value);
+            }
         }
     }
 
     searchNode(value) {
         if (value == this.value) {
-            alert('This value is already in Tree');
+            document.getElementById('notification').innerText = value + ' is already in Tree!';
+            setTimeout(function() {
+                document.getElementById('notification').innerText = '';
+            }, 3000)
             return false;
         }
         else if (value < this.value) {

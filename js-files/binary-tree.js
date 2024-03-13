@@ -19,8 +19,8 @@ class Tree {
         }
     }
 
-    printTree() {
-        this.root.printNode();
+    printTree(value) {
+        this.root.printNode(1, value);
     }
 
     searchInTree(value) {
