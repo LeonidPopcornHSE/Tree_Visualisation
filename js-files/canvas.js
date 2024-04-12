@@ -18,6 +18,7 @@ function setup() {
                 clear();
                 background(220);
                 tree.printTree(nodeValue);
+                tree.getBalanceFactor();
             }
         }
         document.querySelector('.input-value').value = '';

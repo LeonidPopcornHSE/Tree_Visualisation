@@ -2,22 +2,36 @@
 <html>
     <head>
         <title>Binary Tree</title>
-        <p>Binary Tree</p>
+        <p>
+            <form>
+                <select name = "tree">
+                    <option value = "Binary Tree">Binary Tree</option>
+                    <option value = "AVL Tree">AVL Tree</option>
+                </select>
+                <input type="button" value="OK" onClick="multiFunction(this.form)">
+            </form>
+        </p>
         <script src="libraries/p5.min.js"></script>
+        <script>
+            function multiFunction(f) {
+                let treeType = f.tree.selectedIndex;
+                document.title = f.tree.options[treeType].value;
+            }
+        </script>
     </head>
     <body>
         <p id="notification"></p>
         <p>
             <input placeholder="Enter value" class="input-value">
             <button class="add-button">Add</button>
-            <!-- <button>Delete</button> -->
         </p>
         <p>
             <button class="clear-tree-button">Clear Tree</button>
-            <!-- <button>Fill up</button> -->
         </p>
         <script src="js-files/binary-tree-node.js"></script>
         <script src="js-files/binary-tree.js"></script>
+        <script src="js-files/AVL-tree-node.js"></script>
+        <scipt src="js-files/AVL-tree.js"></scipt>
         <script src="js-files/canvas.js"></script>
     </body>
 </html> 
