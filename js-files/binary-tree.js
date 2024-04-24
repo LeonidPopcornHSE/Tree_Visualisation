@@ -26,4 +26,8 @@ class Tree {
     searchInTree(value) {
         return this.root.searchNode(value);
     }
+
+    checkTree() {
+        this.root.checkTree();
+    }
 }  

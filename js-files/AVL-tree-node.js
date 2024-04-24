@@ -4,12 +4,12 @@ class AVLNode {
     static HORIZONTALSPACING = 30;
     static VERTICALSPACING = 50;
 
-    constructor(parent = null, size = AVLNode.SIZE) {
+    constructor(parent = null, value = null, size = AVLNode.SIZE) {
         this.left = null;
         this.right = null;
         this.parent = parent;
-        this.value = null;
-        this.balanceFactor = null;
+        this.value = value;
+        this.height = 0;
         this.size = size;
         this.x = null;
         this.y = null;
@@ -21,56 +21,125 @@ class AVLNode {
         this.colorGreen = color(34, 139, 34);
     }
 
-    getHeight() {
-        if (this.value === null) {
-            return 0;
+    setSpacing() {
+        if (this.left.value != null) {
+            this.left.setSpacing();
         }
-        let right, left;
-        if (this.right !== null) {
-            right = getHeight(this.right);
+        if (this.right.value != null) {
+            this.right.setSpacing();
+        }
+        if (this.left.value == null && this.right.value == null) {
+            this.cumulativeLeftSpacing = 0;
+            this.cumulativeRightSpacing = 0;
+            this.leftSpacing = 0;
+            this.rightSpacing = 0;
         }
         else {
-            right = 0;
+            if (this.left.value) {
+                this.cumulativeLeftSpacing = this.left.cumulativeLeftSpacing + this.left.cumulativeRightSpacing + AVLNode.HORIZONTALSPACING;
+                this.leftSpacing = this.left.cumulativeRightSpacing + AVLNode.HORIZONTALSPACING;
+            }
+            else {
+                this.cumulativeLeftSpacing = 0;
+                this.leftSpacing = 0;
+            }
+            if (this.right.value) {
+                this.cumulativeRightSpacing = this.right.cumulativeLeftSpacing + this.right.cumulativeRightSpacing + AVLNode.HORIZONTALSPACING;
+                this.rightSpacing = this.right.cumulativeLeftSpacing + AVLNode.HORIZONTALSPACING;
+            }
+            else {
+                this.cumulativeRightSpacing = 0;
+                this.rightSpacing = 0;
+            }
         }
-        if (this.left !== null) {
-            left = getHeight(this.left);
-        }
-        else {
-            left = 0;
-        }
-        return Math.max(left, right)
+
     }
 
-    getBalanceFactor() {
-        return this.right.getHeight() - this.left.getHeight()
+    rotateRight() {
+        let parent = this.parent;
+        this.parent = this.left;
+        this.parent.parent = parent;
+        if (this.parent.parent !== null) {
+            if (this.parent.parent.value < this.value) {
+                this.parent.parent.right = this.left;
+            }
+            else {
+                this.parent.parent.left = this.left;
+            }
+        }
+        this.left = this.parent.right;
+        this.parent.right = this;
+        this.left.parent = this;
+        this.height = Math.max(this.left.height, this.right.height) + 1;
+        this.parent.height = Math.max(this.parent.left.height, this.parent.right.height) + 1;
     }
 
-    addValue(value) {
+    rotateLeft() {
+        let parent = this.parent;
+        this.parent = this.right;
+        this.parent.parent = parent;
+        if (this.parent.parent !== null) {
+            if (this.parent.parent.value < this.value) {
+                this.parent.parent.right = this.right;
+            }
+            else {
+                this.parent.parent.left = this.right;
+            }
+        }
+        this.right = this.parent.left;
+        this.parent.left = this;
+        this.right.parent = this;
+        this.height = Math.max(this.left.height, this.right.height) + 1;
+        this.parent.height = Math.max(this.parent.left.height, this.parent.right.height) + 1;
+    }
+
+    insert(value) {
         if (this.value === null) {
             this.value = value;
             this.left = new AVLNode(this);
             this.right = new AVLNode(this);
-            return this;
+            this.height = 0;
         }
-        else if (this.value > value) {
-            let initialLeftSpacing = this.left.cumulativeRightSpacing + AVLNode.HORIZONTALSPACING;
-            let shiftedNode = this.left.addValue(value);
-            this.leftSpacing = this.left.cumulativeRightSpacing + AVLNode.HORIZONTALSPACING;
-            this.cumulativeLeftSpacing = this.left.cumulativeLeftSpacing + this.leftSpacing;
-            if (this.leftSpacing !== initialLeftSpacing) {
-                return this.left;
+        if (value < this.value) {
+            this.left = this.left.insert(value);
+        } 
+        else if (value > this.value) {
+            this.right = this.right.insert(value);
+        } 
+
+        this.height = Math.max(this.left.height, this.right.height) + 1;
+
+        let balanceFactor = this.left.height - this.right.height;
+
+        if (balanceFactor > 1) {
+            if (value < this.left.value) {
+                this.rotateRight();
+            } else if (value > this.left.value) {
+                this.left.rotateLeft();
+                this.rotateRight();
             }
-            return shiftedNode;
+            return this.parent;
         }
-        else {
-            let initialRightSpacing = this.left.cumulativeLeftSpacing + AVLNode.HORIZONTALSPACING;
-            let shiftedNode = this.right.addValue(value);
-            this.rightSpacing = this.right.cumulativeLeftSpacing + AVLNode.HORIZONTALSPACING;
-            this.cumulativeRightSpacing = this.right.cumulativeRightSpacing + this.rightSpacing;
-            if (this.rightSpacing !== initialRightSpacing) {
-                return this.right;
+
+        if (balanceFactor < -1) {
+            if (value > this.right.value) {
+                this.rotateLeft();
+            } else if (value < this.right.value) {
+                this.right.rotateRight();
+                this.rotateLeft();
             }
-            return shiftedNode;
+            return this.parent;
+        }
+        return this;
+    }
+
+    checkTree() {
+        console.log(this);
+        if (this.left.value) {
+            this.left.checkTree();
+        }
+        if (this.right.value) {
+            this.right.checkTree();
         }
     }
 
@@ -83,7 +152,7 @@ class AVLNode {
                 else {
                     this.x = this.parent.x + this.parent.rightSpacing;
                 }
-                this.y = this.parent.y + Node.VERTICALSPACING;
+                this.y = this.parent.y + AVLNode.VERTICALSPACING;
             } 
             else {
                 this.x = x;
@@ -118,7 +187,7 @@ class AVLNode {
     }
 
     printNode(mode, value = null) {
-        if ((this.left.value === null) && (this.right.value === null) && (value !== null)) {
+        if (((this.left.value === null) && (this.right.value === null) && (value !== null)) || (this.value == value)) {
             this.drawNode(2);
         }
         else if (value === null) {
@@ -131,12 +200,12 @@ class AVLNode {
             if (this.value > value) {
                 this.left.printNode(1, value);
             }
-            else if (this.value < value) {
+            else if (this.value <= value) {
                 this.left.printNode(0);
             }
         }
         if (this.right.value !== null) {
-            if (this.value > value) {
+            if (this.value >= value) {
                 this.right.printNode(0);
             }
             else if (this.value < value) {
@@ -145,25 +214,29 @@ class AVLNode {
         }
     }
 
-    searchNode(value) {
-        if (value == this.value) {
+    searchNode(value, mode) {
+        if (value == this.value && mode == 1) {
             document.getElementById('notification').innerText = value + ' is already in Tree!';
             setTimeout(function() {
                 document.getElementById('notification').innerText = '';
             }, 3000)
             return false;
         }
+        else if (value == this.value && mode == 0) {
+            return this;
+        }
         else if (value < this.value) {
             if (this.left === null) {
-                return true;
+                return this;
             }
-            return this.left.searchNode(value);
+            return this.left.searchNode(value, mode);
         }
         else if (value > this.value) {
             if (this.right === null) {
-                return true;
+                return this;
             }
-            return this.right.searchNode(value);
+            return this.right.searchNode(value, mode);
         }
     }
+
 }

@@ -6,17 +6,17 @@ class AVLTree {
     }
     
     addValue(value) {
-        let shiftedNode = this.root.addValue(value);
-        this.setCoordinates(shiftedNode);
+        this.root = this.root.insert(value);
+        this.root.setSpacing(value);
+        this.setCoordinates();
     }
 
-    setCoordinates(node) {
-        if (node === this.root) {
-            node.setCoordinates(this.x, this.y);
-        } 
-        else {
-            node.setCoordinates();
-        }
+    checkTree() {
+        this.root.checkTree();
+    }
+
+    setCoordinates() {
+        this.root.setCoordinates(this.x, this.y);
     }
 
     printTree(value) {
@@ -24,10 +24,7 @@ class AVLTree {
     }
 
     searchInTree(value) {
-        return this.root.searchNode(value);
+        return this.root.searchNode(value, 1);
     }
 
-    getBalanceFactor() {
-        alert(`${this.root.getBalanceFactor()}`);
-    }
 } 

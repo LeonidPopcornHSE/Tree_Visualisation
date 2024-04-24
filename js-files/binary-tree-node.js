@@ -47,7 +47,7 @@ class Node {
             return shiftedNode;
         }
         else {
-            let initialRightSpacing = this.left.cumulativeLeftSpacing + Node.HORIZONTALSPACING;
+            let initialRightSpacing = this.right.cumulativeLeftSpacing + Node.HORIZONTALSPACING;
             let shiftedNode = this.right.addValue(value);
             this.rightSpacing = this.right.cumulativeLeftSpacing + Node.HORIZONTALSPACING;
             this.cumulativeRightSpacing = this.right.cumulativeRightSpacing + this.rightSpacing;
@@ -102,6 +102,7 @@ class Node {
     }
 
     printNode(mode, value = null) {
+        console.log(this);
         if ((this.left.value === null) && (this.right.value === null) && (value !== null)) {
             this.drawNode(2);
         }
@@ -151,5 +152,14 @@ class Node {
         }
     }
 
+    checkTree() {
+        console.log(this);
+        if (this.left) {
+            this.left.checkTree();
+        }
+        if (this.right) {
+            this.right.checkTree();
+        }
+    }
 } 
 
