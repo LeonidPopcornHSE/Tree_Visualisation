@@ -21,7 +21,6 @@ class Node {
     }
 
     wait(ms) {
-        console.log(1);
         return new Promise(resolve => setTimeout(resolve, ms)); 
     }
 
@@ -102,7 +101,6 @@ class Node {
     }
 
     printNode(mode, value = null) {
-        console.log(this);
         if ((this.left.value === null) && (this.right.value === null) && (value !== null)) {
             this.drawNode(2);
         }

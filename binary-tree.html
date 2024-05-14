@@ -1,37 +1,95 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Binary Tree</title>
-        <p>
-            <form>
-                <select name = "tree">
-                    <option value = "Binary Tree">Binary Tree</option>
-                    <option value = "AVL Tree">AVL Tree</option>
-                </select>
-                <input type="button" value="OK" onClick="multiFunction(this.form)">
-            </form>
-        </p>
-        <script src="libraries/p5.min.js"></script>
-        <script>
-            function multiFunction(f) {
-                let treeType = f.tree.selectedIndex;
-                document.title = f.tree.options[treeType].value;
+<head>
+    <title>Binary Tree</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"> 
+    <script src="libraries/p5.min.js"></script>
+    <script>
+        let CANVASWIDTH = window.innerWidth;
+        let CANVASHEIGHT = window.innerHeight;
+
+        let TREEX = CANVASWIDTH / 2;
+        let TREEY = 100;
+
+        let tree; 
+        let selectedTreeType = "Binary Tree";
+
+        function setup() {
+            createCanvas(CANVASWIDTH, CANVASHEIGHT);
+            background(220);
+            tree = new Tree(TREEX, TREEY); 
+
+            
+            document.querySelector('.add-button').addEventListener('click', function(event){
+                let array = (document.querySelector('.input-value').value).split(',');
+                let nodeValue;
+                for (let i = 0; i < array.length; i++) {
+                    nodeValue = eval(array[i]);
+                    if (tree.searchInTree(nodeValue)) {
+                        tree.addValue(nodeValue);
+                        clear();
+                        background(220);
+                        tree.printTree(nodeValue);
+                    }
+                }
+                document.querySelector('.input-value').value = '';
+            });
+
+            
+            document.querySelector('.clear-tree-button').addEventListener('click', function(event){
+                tree = null;
+                clear();
+                background(220);
+                changeTreeType(selectedTreeType);
+            });
+        }
+
+     
+        function changeTreeType(selectedTreeType) {
+            if (selectedTreeType === "Binary Tree") {
+                document.getElementById('notification').innerText = '';
+                tree = new Tree(TREEX, TREEY);
+            } else if (selectedTreeType === "AVL Tree") {
+                document.getElementById('notification').innerText = '';
+                tree = new AVLTree(TREEX, TREEY);
+            } else if (selectedTreeType === "Splay Tree") {
+                document.getElementById('notification').innerText = '';
+                tree = new SplayTree(TREEX, TREEY);
             }
-        </script>
-    </head>
-    <body>
-        <p id="notification"></p>
-        <p>
-            <input placeholder="Enter value" class="input-value">
-            <button class="add-button">Add</button>
-        </p>
-        <p>
-            <button class="clear-tree-button">Clear Tree</button>
-        </p>
-        <script src="js-files/AVL-tree-node.js"></script>
-        <script src="js-files/AVL-tree.js"></script>
-        <script src="js-files/binary-tree-node.js"></script>
-        <script src="js-files/binary-tree.js"></script>
-        <script src="js-files/canvas.js"></script>
-    </body>
-</html> 
+        }
+
+        function applyTreeType() {
+            selectedTreeType = document.querySelector('select[name="tree"]').value;
+            document.title = selectedTreeType;
+            document.querySelector('.site-title').innerText = selectedTreeType + " Visualisation";
+            clear();
+            background(220);
+        }
+    </script>
+</head>
+<body>
+    <h1 class="site-title">Tree Visualisation</h1>
+    <p id="notification"></p>
+    <p class="button-container">
+        <form>
+            <select name="tree" onchange="changeTreeType(this.value)" class="rounded-select"> 
+                <option value="Binary Tree">Binary Tree</option>
+                <option value="AVL Tree">AVL Tree</option>
+                <option value="Splay Tree">Splay Tree</option>
+            </select>
+            <input type="button" value="OK" class="button rounded-button" onClick="applyTreeType()">
+        </form>
+    </p>
+    <p class="input-container">
+        <input placeholder="Enter value" class="input-value">
+        <button class="button rounded-button add-button">Add</button>
+        <button class="button rounded-button clear-tree-button">Clear Tree</button>
+    </p>
+    <script src="js-files/AVL-tree-node.js"></script>
+    <script src="js-files/AVL-tree.js"></script>
+    <script src="js-files/Splay-tree-node.js"></script>
+    <script src="js-files/Splay-tree.js"></script>
+    <script src="js-files/binary-tree-node.js"></script>
+    <script src="js-files/binary-tree.js"></script>
+</body>
+</html>
