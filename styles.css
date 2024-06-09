@@ -2,32 +2,36 @@
     display: flex;
     align-items: center;
 }
-
+ 
 .input-container input {
     margin-right: 10px;
 }
-
-
+ 
+ 
 .button-container {
     display: flex;
     flex-direction: column;
 }
-
+ 
 .button-container button {
     margin-top: 10px;
 }
-
-
+ 
+ 
 .clear-button-container {
     display: flex;
     align-items: center;
 }
-
+ 
 .clear-tree-button {
     margin-left: 10px;
 }
-
-
+ 
+.random-button {
+    margin-left: 10px;
+}
+ 
+ 
 .button {
     background-color: #4CAF50;
     border: none;
@@ -42,16 +46,16 @@
     transition: background-color 0.3s;
     background-image: linear-gradient(to bottom, #4CAF50, #45a049);
 }
-
+ 
 .button:hover {
     background-color: #45a049;
 }
-
+ 
 .rounded-button {
     border-radius: 50px; 
 }
-
-
+ 
+ 
 .input-value {
     padding: 10px; 
     font-size: 16px; 
@@ -59,8 +63,8 @@
     border: 1px solid #ccc; 
     width: 250px; 
 }
-
-
+ 
+ 
 .site-title {
     text-align: left;
     font-size: 32px;
@@ -69,8 +73,8 @@
     margin-bottom: 30px;
     color: #333;
 }
-
-
+ 
+ 
 .tree-type {
     padding: 10px; 
     font-size: 16px; 
@@ -81,7 +85,7 @@
     color: #333; 
     margin-bottom: 30px; 
 }
-
+ 
 .tree-label {
     font-size: 18px; 
     font-weight: bold; 
@@ -89,7 +93,7 @@
     display: block; 
     color: #333; 
 }
-
+ 
 .rounded-select {
     padding: 10px; 
     font-size: 16px;

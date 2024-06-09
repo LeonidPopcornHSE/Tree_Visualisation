@@ -159,5 +159,4 @@ class Node {
             this.right.checkTree();
         }
     }
-} 
-
+}

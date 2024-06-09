@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Binary Tree</title>
+    <title>Tree Visualisator</title>
     <link rel="stylesheet" type="text/css" href="styles.css"> 
     <script src="libraries/p5.min.js"></script>
     <script>
         let CANVASWIDTH = window.innerWidth;
         let CANVASHEIGHT = window.innerHeight;
-
+ 
         let TREEX = CANVASWIDTH / 2;
         let TREEY = 100;
-
+ 
         let tree; 
         let selectedTreeType = "Binary Tree";
-
+ 
         function setup() {
             createCanvas(CANVASWIDTH, CANVASHEIGHT);
             background(220);
             tree = new Tree(TREEX, TREEY); 
-
-            
+ 
             document.querySelector('.add-button').addEventListener('click', function(event){
                 let array = (document.querySelector('.input-value').value).split(',');
                 let nodeValue;
@@ -34,17 +33,36 @@
                 }
                 document.querySelector('.input-value').value = '';
             });
-
-            
+ 
             document.querySelector('.clear-tree-button').addEventListener('click', function(event){
                 tree = null;
                 clear();
                 background(220);
                 changeTreeType(selectedTreeType);
             });
+ 
+            document.querySelector('.random-button').addEventListener('click', function(event){
+                let inputValue = document.querySelector('.input-value').value; 
+                let numberOfNodes = parseInt(inputValue); 
+ 
+                if (inputValue === "") { 
+                    numberOfNodes = 1; 
+                } 
+                for (let i = 0; i < numberOfNodes; i++) { 
+                    let randomValue;
+                    do {
+                        randomValue = Math.floor(Math.random() * 100); 
+                    } while (randomValue === 0); 
+                    tree.addValue(randomValue);
+                }
+ 
+                clear();
+                background(220);
+                tree.printTree();
+            });
+ 
         }
-
-     
+ 
         function changeTreeType(selectedTreeType) {
             if (selectedTreeType === "Binary Tree") {
                 document.getElementById('notification').innerText = '';
@@ -57,7 +75,7 @@
                 tree = new SplayTree(TREEX, TREEY);
             }
         }
-
+ 
         function applyTreeType() {
             selectedTreeType = document.querySelector('select[name="tree"]').value;
             document.title = selectedTreeType;
@@ -84,6 +102,7 @@
         <input placeholder="Enter value" class="input-value">
         <button class="button rounded-button add-button">Add</button>
         <button class="button rounded-button clear-tree-button">Clear Tree</button>
+        <button class="button rounded-button random-button">Random</button>
     </p>
     <script src="js-files/AVL-tree-node.js"></script>
     <script src="js-files/AVL-tree.js"></script>
