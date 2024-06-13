@@ -1,6 +1,6 @@
 class SplayNode {
     
-    static SIZE = 40;
+    static SIZE = 45;
     static HORIZONTALSPACING = 30;
     static VERTICALSPACING = 50;
 
@@ -193,7 +193,7 @@ class SplayNode {
         ellipse(this.x,this.y,this.size,this.size);
         fill(0);
         textAlign(CENTER, CENTER);
-        textSize(this.size - 15);
+        textSize(this.size - 20);
         text(this.value,this.x,this.y+1);
     }
 
