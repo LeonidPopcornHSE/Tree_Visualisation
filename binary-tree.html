@@ -51,14 +51,14 @@
                 for (let i = 0; i < numberOfNodes; i++) { 
                     let randomValue;
                     do {
-                        randomValue = Math.floor(Math.random() * 100); 
+                        randomValue = Math.floor(Math.random() * 999); 
                     } while (randomValue === 0); 
                     tree.addValue(randomValue);
+                    clear();
+                    background(220);
+                    tree.printTree(randomValue);
                 }
- 
-                clear();
-                background(220);
-                tree.printTree();
+                document.querySelector('.input-value').value = '';
             });
  
         }
